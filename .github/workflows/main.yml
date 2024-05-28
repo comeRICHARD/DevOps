@@ -35,6 +35,11 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v2.5.0
+      - name: Print secrets
+        run: |
+          echo "USER_DOCKERHUB: ${{ secrets.USER_DOCKERHUB }}"
+          echo "PASSWORD_DOCKERHUB: ${{ secrets.PASSWORD_DOCKERHUB }}"
+
       - name: Login to DockerHub
         run: docker login -u ${{ secrets.USER_DOCKERHUB }} -p ${{ secrets.PASSWORD_DOCKERHUB }}
 
