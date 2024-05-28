@@ -24,7 +24,6 @@ jobs:
         with:
           java-version: '17'
           distribution: 'temurin'
-          cache: 'gradle'
 
      #finally build your app with the latest command
       - name: Build and test with Maven
