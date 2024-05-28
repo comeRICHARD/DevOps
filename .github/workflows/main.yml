@@ -25,7 +25,6 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
 
-     #finally build your app with the latest command
       - name: Build and test with Maven
         run: mvn clean verify --file api_java/simple-api-student-main/simple-api-student-main/pom.xml
 
