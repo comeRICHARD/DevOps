@@ -1,13 +1,25 @@
-**TP1**
 
-**This is a 3 parts applications :**
-- HTTP server
-- Database
-- Backend API
+---
 
-**DataBase Part**
+# DevOps Project README
 
-*First we create the dockerfile* 
+## Overview
+
+This project consists of three main components:
+
+1. HTTP server
+2. Database
+3. Backend API
+
+---
+
+## Database Part
+
+### Dockerfile Creation
+
+We start by creating a Dockerfile for the database component:
+
+```Dockerfile
 FROM postgres:14.1-alpine
 
 ENV POSTGRES_DB=db \
@@ -15,46 +27,72 @@ ENV POSTGRES_DB=db \
 
 COPY ./InsertData.sql/ /docker-entrypoint-initdb.d/
 COPY ./CreateScheme.sql/ /docker-entrypoint-initdb.d/
+```
 
-*Then build the image*
+### Building the Docker Image
+
+```bash
 docker build -t comerichard/postgres_image .
+```
 
-*We create the network*
+### Network Creation
+
+```bash
 docker network create app-network2
+```
 
-*We run the container with its volume*
-docker run --name postgres_devops --network app-network2 -e POSTGRES_PASSWORD=pswd -p 5432:5432 
+### Running the Database Container
+
+```bash
+docker run --name postgres_devops --network app-network2 -e POSTGRES_PASSWORD=pswd -p 5432:5432 \
 -v C:/Users/richa/Documents/EPF/MDE/DevOps/Data:/Data/ -d comerichard/postgres_image
+```
 
-*We run the adminer container*
+### Running the Adminer Container
+
+```bash
 docker run --name adminer-container --network app-network2 -p 8090:8080 adminer
+```
 
+---
 
-**BackEnd API**
-*We create the image and run container of simple-api, creation of main.java*
+## Backend API
+
+### Building and Running the Backend API Container
+
+We create the image and run the container of simple-api, including the creation of main.java:
+
+```bash
 docker build -t java-hello-world_4 .
 docker run -p 8091:8080 --network app-network2 java-hello-world_4
-This will show hello world at the localhost.
+```
 
-Multi stage allows us to first build the image from maven and then run automatically myapp. The build stage allows us to copy some directories and run some maven’s commands.
-The run stage set the environment and specify the default command to run when a container is created.
+This will display "Hello World" at the localhost.
 
-**TP2**
+### Multi-stage Dockerfile Explanation
 
-*CI*
-For windows mvn needs to be downloaded from wsl for example it is far more easy.
-Then if the java version is not the good one pass and it will work on github machines.
+Multi-stage Dockerfile allows us to first build the image from Maven and then automatically run myapp. The build stage enables us to copy directories and run Maven commands. The run stage sets the environment and specifies the default command to run when a container is created.
 
-Create the main.yml and write the jobs you need. Every time you push it will launch tests automically.
+---
 
-*Set up a quality gate*
+## TP2: Continuous Integration (CI)
 
+For Windows, Maven needs to be downloaded from WSL, making it easier to use. Ensure that the Java version is correct; it will work on GitHub machines if the version is appropriate.
 
+### Setting up CI
 
-*Quality Gate* 
+Create the `main.yml` file and define the necessary jobs. With this configuration, tests will be automatically launched every time you push changes.
 
-We have 2 issues, 53,6% of coverage, 3 security hotspots failed.
+### Quality Gate
 
-**TP3**
-*Using Roles*
-So we have in ansible a .yml which redirect to the tasks which are in roles/docker/task. The task are responsible for the downloading of docker.
+We have encountered 2 issues, achieved 53.6% test coverage, and failed 3 security hotspots.
+
+---
+
+## TP3: Using Roles in Ansible
+
+Roles in Ansible allow for better organization and modularity. We have a `.yml` file that redirects to tasks stored in roles/docker/task. These tasks are responsible for managing Docker.
+
+---
+
+This README provides an overview of the project structure, setup instructions, and insights into continuous integration and quality control processes. For more detailed information, refer to individual sections and files within the project.
