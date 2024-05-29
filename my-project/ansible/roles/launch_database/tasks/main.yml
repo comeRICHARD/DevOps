@@ -1,0 +1,20 @@
+- name: Pull the BDD image
+  docker_image:
+    name: comerichard/devops-database
+    tag: latest
+    source: pull
+  vars:
+      ansible_python_interpreter: /usr/bin/python3
+
+- name: Run BDD
+  docker_container:
+    state: started
+    name: database
+    image: comerichard/devops-database
+    env:
+      POSTGRES_USER: usr
+      POSTGRES_PASSWORD: pswd
+    networks: 
+      - name: "app-network"
+  vars:
+      ansible_python_interpreter: /usr/bin/python3
