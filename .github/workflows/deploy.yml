@@ -4,8 +4,7 @@ on:
   workflow_run:
     workflows: ["CI devops 2024"]
     types:
-      
-completed
+      - completed
 
 jobs:
   deploy:
@@ -14,28 +13,28 @@ jobs:
 
     steps:
     
-name: Checkout repository
-    uses: actions/checkout@v2
+        - name: Checkout repository
+            uses: actions/checkout@v2
 
-    
-name: Set up SSH
-    uses: webfactory/ssh-agent@v0.5.3
-    with:
-      ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+            
+        - name: Set up SSH
+            uses: webfactory/ssh-agent@v0.5.3
+            with:
+              ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
 
-    
-name: Install Ansible
-    run: |
-      sudo apt-get update
-      sudo apt-get install -y ansible
+            
+        - name: Install Ansible
+            run: |
+              sudo apt-get update
+              sudo apt-get install -y ansible
 
-    
-name: Disable host key checking
-    run: echo "ANSIBLE_HOST_KEY_CHECKING=False" >> $GITHUB_ENV
+            
+        - name: Disable host key checking
+            run: echo "ANSIBLE_HOST_KEY_CHECKING=False" >> $GITHUB_ENV
 
-    
-name: Run deployment playbook
-    run: |
-      ansible-playbook -i my-project/ansible/inventory/setup.yml  my-project/ansible/playbook.yml
-    env:
-      ANSIBLE_HOST_KEY_CHECKING: False
+            
+        - name: Run deployment playbook
+            run: |
+              ansible-playbook -i my-project/ansible/inventory/setup.yml  my-project/ansible/playbook.yml
+            env:
+              ANSIBLE_HOST_KEY_CHECKING: False
