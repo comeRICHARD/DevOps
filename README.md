@@ -51,3 +51,10 @@ Create the main.yml and write the jobs you need. Every time you push it will lau
 
 
 
+*Quality Gate* 
+
+We have 2 issues, 53,6% of coverage, 3 security hotspots failed.
+
+**TP3**
+*Using Roles*
+So we have in ansible a .yml which redirect to the tasks which are in roles/docker/task. The task are responsible for the downloading of docker.
