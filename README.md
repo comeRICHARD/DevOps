@@ -167,8 +167,6 @@ The deployment is made in differents task. We use a principal playbook that will
 
 ### Continuous Deployment
 
-We create a deploy.yml in our workflow, that deploy the app.
+We create  a deploy.yml in our workflow, that deploy the app.
 
 ---
-
--
