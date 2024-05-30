@@ -13,9 +13,11 @@ This project consists of three main components:
 
 ---
 
-## Database Part
+## TP1
 
-### Dockerfile Creation
+### Database Part
+
+Dockerfile Creation :
 
 We start by creating a Dockerfile for the database component:
 
@@ -41,7 +43,7 @@ docker build -t comerichard/postgres_image .
 docker network create app-network2
 ```
 
-### Running the Database Container
+### Running the Database Container with its volume
 
 ```bash
 docker run --name postgres_devops --network app-network2 -e POSTGRES_PASSWORD=pswd -p 5432:5432 \
@@ -75,24 +77,97 @@ Multi-stage Dockerfile allows us to first build the image from Maven and then au
 
 ---
 
+## Http server
+
+### Reverse Proxy 
+
+First the creation of the index.html to display something on localhost. Then the changement of the configuration to set the container and its ports to communicate.
+A reverse proxy will allow to separate user from the backend. The users will first communicate with proxy and get what is returned.
+
+---
+
+## Link application
+
+### Docker-compose
+
+```bash
+docker-compose up
+```
+
+Docker-compose up will allow us to run all the containers with only one command. It diminuish the probability of making errors and use less time.
+
+---
+
+## Publish
+
+### Dockerhub
+
+
+```bash
+docker tag database comerichard/database:1.0
+docker push comerichard/database:1.0  
+```
+
+This is done for the three containers so taht we tag them and publish them on dockerhub. Someone can now download our images.
+
+---
+
+--- 
+
 ## TP2: Continuous Integration (CI)
 
 For Windows, Maven needs to be downloaded from WSL, making it easier to use. Ensure that the Java version is correct; it will work on GitHub machines if the version is appropriate.
 
-### Setting up CI
+### Setting up CI / CD
 
 Create the `main.yml` file and define the necessary jobs. With this configuration, tests will be automatically launched every time you push changes.
 
+pom.xml is a configuration file used by maven, testcontainers allow us to use containers in our automated tests which is what we want for automatisation.
+
+Creation of the .github/workflow repo where the tests will be writen in a yml file.
+
+### Continious Delivery
+
+This part is to build and publish new images on dockerhub every time we commit. This way you do not have to do it manually and every thing is automated when a commit is done.
+
 ### Quality Gate
 
-We have encountered 2 issues, achieved 53.6% test coverage, and failed 3 security hotspots.
+Connected on sonarcloud, it will test our application automatically. 
+
+We have encountered 2 issues, achieved 53.6% test coverage, and failed 3 security hotspots. So Dev have some work to do !
+
+---
 
 ---
 
 ## TP3: Using Roles in Ansible
 
+The purpose is to deploy the app on the server.
+
+### Setup.yml
+
+The setup.yml is here to give the host and access to our server.
+
+```bash
+ansible all -i inventories/setup.yml -m ping
+```
+We can try to ping the server to verify.
+
+### Playbooks
+
+The playbooks is a config file of ansible, it has all the tasks and allow automatisation.
+
+### Roles
+
 Roles in Ansible allow for better organization and modularity. We have a `.yml` file that redirects to tasks stored in roles/docker/task. These tasks are responsible for managing Docker.
+
+### Deploy the app
+
+The deployment is made in differents task. We use a principal playbook that will call different yml file. These file will automatically download in our server Docker, python, it launch the db, the app and the proxy. Globally it do everything automatically.
+
+### Continuous Deployment
+
+We create a deploy.yml in our workflow, that deploy the app.
 
 ---
 
-This README provides an overview of the project structure, setup instructions, and insights into continuous integration and quality control processes. For more detailed information, refer to individual sections and files within the project.
